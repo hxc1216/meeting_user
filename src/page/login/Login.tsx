@@ -1,6 +1,8 @@
 import { Form, Input, Button, message } from "antd"
 import "./login.css"
-import { login } from "../interface"
+import { login } from "../../interface/interfaces"
+import { useCallback } from "react"
+import { useNavigate } from "react-router-dom"
 
 const layout1 = {
 	labelCol: { span: 4 },
@@ -16,26 +18,24 @@ interface LoginUser {
 	username: string
 	password: string
 }
-const onFinish = async (values: LoginUser) => {
-	// try {
-	const res = await login(values.username, values.password)
-
-	const { code, message: msg, data } = res.data
-	if (res.status === 200 || res.status === 201) {
-		message.success("登录成功")
-
-		localStorage.setItem("access_token", data.accessToken)
-		localStorage.setItem("refresh_token", data.refreshToken)
-		localStorage.setItem("user_info", JSON.stringify(data.userInfo))
-	} else {
-		message.error(data || "系统繁忙，请稍后再试")
-	}
-	// } catch (error: any) {
-	// 	message.error(error.response.data.data || "系统繁忙，请稍后再试")
-	// }
-}
 
 export function Login() {
+	const navigate = useNavigate()
+	const onFinish = useCallback(async (values: LoginUser) => {
+		const res = await login(values.username, values.password)
+		const { code, message: msg, data } = res.data
+		if (res.status === 200 || res.status === 201) {
+			message.success("登录成功")
+			localStorage.setItem("access_token", data.accessToken)
+			localStorage.setItem("refresh_token", data.refreshToken)
+			localStorage.setItem("user_info", JSON.stringify(data.userInfo))
+			setTimeout(() => {
+				navigate("/")
+			}, 1000)
+		} else {
+			message.error(data || "系统繁忙，请稍后再试")
+		}
+	}, [])
 	return (
 		<div id="login-container">
 			{/* <h1>会议室</h1> */}
@@ -48,8 +48,8 @@ export function Login() {
 				</Form.Item>
 				<Form.Item {...layout2}>
 					<div className="links">
-						<a href="#">创建账号</a>
-						<a href="#">忘记密码</a>
+						<a href="/register">创建账号</a>
+						<a href="/update_password">忘记密码</a>
 					</div>
 				</Form.Item>
 				<Form.Item {...layout2}>

@@ -2,10 +2,10 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import reportWebVitals from "./reportWebVitals"
 import { Link, Outlet, RouterProvider, createBrowserRouter } from "react-router-dom"
-import { ErrorPage } from "./ErrorPage"
-import { Login } from "./user/Login"
-import { Register } from "./user/Register"
-import { UpdatePassword } from "./user/UpdatePassword"
+import { ErrorPage } from "./page/error/ErrorPage"
+import { Login } from "./page/login/Login"
+import { Register } from "./page/register/Register"
+import { UpdatePassword } from "./page/update_password/UpdatePassword"
 
 const routes = [
 	{
